@@ -14,6 +14,7 @@
 		946B51442ADA20EB003AA32F /* fiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946B51432ADA20EB003AA32F /* fiveTests.swift */; };
 		946B514E2ADA20EB003AA32F /* fiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946B514D2ADA20EB003AA32F /* fiveUITests.swift */; };
 		946B51502ADA20EB003AA32F /* fiveUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946B514F2ADA20EB003AA32F /* fiveUITestsLaunchTests.swift */; };
+		946B515D2ADA2205003AA32F /* TakeFive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946B515C2ADA2205003AA32F /* TakeFive.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		946B51492ADA20EB003AA32F /* fiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		946B514D2ADA20EB003AA32F /* fiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fiveUITests.swift; sourceTree = "<group>"; };
 		946B514F2ADA20EB003AA32F /* fiveUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fiveUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		946B515C2ADA2205003AA32F /* TakeFive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeFive.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			children = (
 				946B51322ADA20EA003AA32F /* fiveApp.swift */,
 				946B51342ADA20EA003AA32F /* ContentView.swift */,
+				946B515C2ADA2205003AA32F /* TakeFive.swift */,
 				946B51362ADA20EB003AA32F /* Assets.xcassets */,
 				946B51382ADA20EB003AA32F /* Preview Content */,
 			);
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				946B515D2ADA2205003AA32F /* TakeFive.swift in Sources */,
 				946B51352ADA20EA003AA32F /* ContentView.swift in Sources */,
 				946B51332ADA20EA003AA32F /* fiveApp.swift in Sources */,
 			);
