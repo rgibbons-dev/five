@@ -7,8 +7,12 @@
 
 import SwiftUI
 
-let timer = Timer
+let counter = Timer
     .publish(every: 1, on: .main, in: .common)
+    .autoconnect()
+
+let progress = Timer
+    .publish(every: 0.01, on: .main, in: .common)
     .autoconnect()
 
 struct InnerCircle: View {
@@ -17,57 +21,80 @@ struct InnerCircle: View {
             .stroke(
                 .gray,
                 style: StrokeStyle(
-                    lineWidth: 40,
-                    lineCap: .round,
-                    lineJoin: .round
-                )
+                    lineWidth: 20                )
             )
-            .fill(.yellow)
+            .fill(.clear)
             .frame(width: 300, height: 300)
     }
 }
 
 struct OuterProgress: View {
+    @State var elapsed: CGFloat = 0.0
+    @State var seconds: CGFloat = 0.0
     var countTo: Int
-    var ct: Int
     var body: some View {
-        Circle()
-            .trim(
-                from: 0,
-                to: (CGFloat(ct) / CGFloat(countTo))
-            )
-            .stroke(
-                .purple,
-                style: StrokeStyle(
-                    lineWidth: 20
+        ZStack {
+            Circle()
+                .trim(
+                    from: 0,
+                    to: crawl()
                 )
-            )
-            .frame(width: 320, height: 320)
-            .animation(
-                .easeInOut(duration: 0.1),
-                value: 1
-            )
+                .stroke(
+                    .blue,
+                    style: StrokeStyle(
+                        lineWidth: 20,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .frame(width: 300, height: 300)
+                .animation(
+                    .easeInOut(duration: 0.11),
+                    value: 1
+                )
+        } .onReceive(progress, perform: { _ in
+            elapsed += 0.01
+            if elapsed >= 1.0 {
+                seconds += 1
+                elapsed = 0.0
+            }
+        })
+    }
+    
+    func crawl() -> CGFloat {
+        return (CGFloat(elapsed + seconds) / CGFloat(countTo))
     }
 }
 
 struct TakeFive: View {
-    @State var ct: Int = 0
-    @State var viewCt: Int = 10
-    var countTo: Int = 10
-    @State var elapsed: CGFloat = 0.0
+    @State var viewCt: Int = 9
+    @State var isComplete: Bool = false
+    var countTo: Int = 9
     var body: some View {
         VStack {
             Text("\(viewCt)")
                 .background(
                     ZStack {
                         InnerCircle()
-                        OuterProgress(countTo: countTo, ct: ct)
+                        OuterProgress(countTo: countTo)
                     }
                 )
-        } .onReceive(timer, perform: { time in
-            if ct < countTo {
-                ct += 1
+                .padding([.top, .bottom], 200)
+            Button(
+                action: {
+                    print("Button tapped")
+                },
+                label: {
+                    Text("Go to the app!")
+                }
+            )
+            .background(.orange)
+            .opacity(isComplete ? 1 : 0)
+        } .onReceive(counter, perform: { _ in
+            if viewCt > 0 {
                 viewCt -= 1
+            } else {
+                isComplete = true
             }
         })
     }
