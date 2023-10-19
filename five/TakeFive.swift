@@ -1,105 +1,65 @@
 //
-//  TakeFive.swift
+//  Blocker.swift
 //  five
 //
-//  Created by Ryan Gibbons on 10/13/23.
+//  Created by Ryan Gibbons on 10/15/23.
 //
 
+import AppIntents
 import SwiftUI
+import Foundation
 
-let counter = Timer
-    .publish(every: 1, on: .main, in: .common)
-    .autoconnect()
-
-let progress = Timer
-    .publish(every: 0.01, on: .main, in: .common)
-    .autoconnect()
-
-struct InnerCircle: View {
-    var body: some View {
-        Circle()
-            .stroke(
-                .gray,
-                style: StrokeStyle(
-                    lineWidth: 20                )
-            )
-            .fill(.clear)
-            .frame(width: 300, height: 300)
-    }
+enum ToBlock: String, AppEnum {
+    case instagram
+    case facebook
+    case x
+    case snapchat
+    case youtube
+    case settings
+    
+    static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "ToBlock")
+    
+    static var caseDisplayRepresentations: [Self: DisplayRepresentation] = [
+            .instagram: "Instagram",
+            .facebook: "Facebook",
+            .x: "X",
+            .snapchat: "Snapchat",
+            .youtube: "YouTube",
+            .settings: "Settings"
+    ]
 }
 
-struct OuterProgress: View {
-    @State var elapsed: CGFloat = 0.0
-    @State var seconds: CGFloat = 0.0
-    var countTo: Int
-    var body: some View {
-        ZStack {
-            Circle()
-                .trim(
-                    from: 0,
-                    to: crawl()
-                )
-                .stroke(
-                    .blue,
-                    style: StrokeStyle(
-                        lineWidth: 20,
-                        lineCap: .round,
-                        lineJoin: .round
-                    )
-                )
-                .frame(width: 300, height: 300)
-                .animation(
-                    .easeInOut(duration: 0.11),
-                    value: 1
-                )
-        } .onReceive(progress, perform: { _ in
-            elapsed += 0.01
-            if elapsed >= 1.0 {
-                seconds += 1
-                elapsed = 0.0
-            }
-        })
+let urlDict: [ToBlock: URL] = [
+    ToBlock.instagram: URL(string: "instagram://")!,
+    ToBlock.facebook: URL(string: "fb://")!,
+    ToBlock.x: URL(string: "twitter://")!,
+    ToBlock.snapchat: URL(string: "snapchat://")!,
+    ToBlock.youtube: URL(string: "youtube://")!,
+    ToBlock.settings: URL(string: UIApplication.openSettingsURLString)!,
+]
+
+struct TakeFive: AppIntent {
+    static var title: LocalizedStringResource = "take five"
+    
+    static var description: IntentDescription =
+    """
+    Hello, world!
+    """
+    
+    static var openAppWhenRun: Bool = true
+    
+    @Parameter(title: "App")
+    var app: ToBlock
+    
+    static var parameterSummary: some ParameterSummary {
+        Summary("take five from \(\.$app)")
     }
     
-    func crawl() -> CGFloat {
-        return (CGFloat(elapsed + seconds) / CGFloat(countTo))
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        let dest: URL? = urlDict[$app.wrappedValue]
+        ViewModel.shared.updateUrl(changed: dest!)
+        ViewModel.shared.navigateToPause()
+        return .result()
     }
-}
-
-struct TakeFive: View {
-    @State var viewCt: Int = 9
-    @State var isComplete: Bool = false
-    var countTo: Int = 9
-    var body: some View {
-        VStack {
-            Text("\(viewCt)")
-                .background(
-                    ZStack {
-                        InnerCircle()
-                        OuterProgress(countTo: countTo)
-                    }
-                )
-                .padding([.top, .bottom], 200)
-            Button(
-                action: {
-                    print("Button tapped")
-                },
-                label: {
-                    Text("Go to the app!")
-                }
-            )
-            .background(.orange)
-            .opacity(isComplete ? 1 : 0)
-        } .onReceive(counter, perform: { _ in
-            if viewCt > 0 {
-                viewCt -= 1
-            } else {
-                isComplete = true
-            }
-        })
-    }
-}
-
-#Preview {
-    TakeFive()
 }
