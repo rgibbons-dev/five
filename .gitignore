@@ -1,8 +1,8 @@
 xcuserdata/
 .build/
-docs/_site/
-docs/.sass-cache/
-docs/.jekyll-cache/
-docs/.jekyll-metadata/
-docs/.bundle/
-docs/vendor
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata/
+.bundle/
+vendor/
