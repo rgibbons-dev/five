@@ -1,13 +1,86 @@
----
-title: home
----
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>{{ page.title }}</title>
-  </head>
-  <body>
-    <h1>{{ "Hello World!" | downcase }}</h1>
-  </body>
+<head>
+  <title>five</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+  
+    p {
+      margin: 10px;
+      padding: 0 20px;
+      line-height: 1.5;
+      text-align: justify;
+    }
+    
+    @media (max-width: 600px) {
+      p {
+        font-size: 14px;
+      }
+    }
+    
+    ul {
+      list-style-type: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>On `five`</h1>
+  <p>
+    Smartphone and social media addiction is an issue I've been dealing with. In an effort to combat this, I sought out to forcibly restrain myself 
+    from accessing these apps and websites, first using the built-in App Limits feature on my iPhone, then turning to stronger third-party apps that, 
+    instead of simply telling you that your time is up, they make you wait for a certain amount of time, say ten seconds, before you can use the app, 
+    giving you time to make a conscious choice as to whether it is absolutely necessary to use the app at that moment. It also happens to be the case 
+    that this is a lucrative industry, with seemingly every app locking full functionality behind a subscription paywall, just another brick in this 
+    (very silly) Productivity Industrial Complex. There is a spectre haunting the Unitied States, the spectre of Productivity. I digress. I sought to 
+    create an alternative to these apps, one that is wholly free to use. I failed; I did not know beforehand that Apple softly forbids apps from doing 
+    something that would serve as the load-bearing beam of this app: opening other apps. On iOS, apps are opened via URL schemes, but outside of a few 
+    exceptions carved out for developers, only Apple is allowed to produce apps that can open other apps.
+  </p>
+  <p>
+    Despite this, I still made a working version of the app. It is minimal; it leans heavily on Shortcuts and Personal Automations to trigger the app 
+    lockout. The workflow is as follows: the user creates a Personal Automation that is to be triggered on opening of their desired app, then adds the 
+    "take five" Shortcut to this automation and selects the corresponding app from the dropdown. That's it. It's hardwired to a certain period of time, 
+    but I implemented a user interface in the Android version, <a href="https://github.com/rgibbons-dev/anfive">anfive</a> that allows the user to change 
+    how long they want to wait before the app is to open. One limitation that I ran into with this dropdown is that it was a compromised solution; I preferred 
+    to infer the app from the automation, but I wasn't able to figure out how to get that working. Anyway, this is all to say that this is an incomplete, 
+    archived project; in order for it to be submitted to the App Store, I'd have to obfusucate the code that does the app opening, which is not a guaranteed 
+    recipe for success, as I'm sure that Apple may have looked the other way for the other apps that do this because they're making money off of them, while 
+    'five' is meant to be totally free, thus bound to be more closely scrutinized. Should third-party app stores be a success and not gimped by Apple, I'll 
+    publish this app there, but until then, it will remain here, in the archives.
+  </p>
+  <p>
+    Now, before I take five, I'd like to share my report on the process of developing this app. I started with ChatGPT (GPT-4). I was curious to see if it would 
+    live up to the hype. It didn't. I ended up trawling GitHub repositories, stackoverflow, and blog posts for insight into how to do what I wanted to do in 
+    SwiftUI, something totally new to me. I found SwiftUI enjoyable and straightforward to use. I planned for two central views: a landing page, and a page 
+    that was to render when the Shortcut was triggered. The latter involved a progress bar represented as a circle. It was a bit tricky to get it working as intended; 
+    I needed to use two timers, one for the countdown and one for the progress bar. I tried to use only one, but it required complex logic, so I settled on having 
+    two independent timers. Next I had to ensure that a button was rendered, this button would take the user to their desired app. Creating a button is clearly trivial, 
+    doing it while making sure that it appeared upon progress bar completion and in the right position was not. I wanted it to be centered in the middle of the progress 
+    bar, but I ended up settling on having it appear below, using a VStack. I used the opacity property and a boolean variable associated with completion of the 
+    progress bar to achieve the visibility effect. Using opacity makes the button take up space ahead of time, instead of being rendered conditionally.
+  </p>
+  <p>
+    With the Views complete, the second half of the app involved dealing with AppIntents. The WWDC22 session, “Dive into App Intents”, guided me through the process 
+    of creating a Shortcut. Using this, some stackoverflow posts, and the documentation, I created a Shortcut. To glue it all together required a ViewModel, which on 
+    performance of the Shortcut, handled navigation from the app to `five`, and after completion of the timer, handled navigation back to the app on the button click. 
+    That's about it. Like I said, very simple app. Below are the resources I used in the making of this app.
+  </p>
+  <ul>
+    <li><a href="https://developer.apple.com/documentation/appintents/integrating-custom-types-into-your-intents#Enumerate-your-data-types-static-values">Apple Documentation: Integrating Custom Types into Your Intents</a></li>
+    <li><a href="https://developer.apple.com/forums/thread/731100">How to use ParameterSummaryBuilder?</a></li>
+    <li><a href="https://developer.apple.com/videos/play/wwdc2022/10032/">WWDC22 Session: Dive into App Intents</a></li>
+    <li><a href="https://github.com/mralexhay/Booky">Booky: A demo app exploring the new App Intents framework in iOS16.</a></li>
+    <li><a href="https://github.com/bhagyas/app-urls">app-urls: A long list of App URLs for iOS, macOS and Android</a></li>
+    <li><a href="https://stackoverflow.com/questions/73263899/how-to-open-specific-view-in-swiftui-app-using-appintents#:~:text=1%20Answer%20Sorted%20by%3A%201,Here%27s%20an%20example%20view">How to open specific view in SwiftUI app using AppIntents?</a></li>
+    <li><a href="https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app">Apple Documentation: Managing Model Data In Your App</a></li>
+    <li><a href="https://stackoverflow.com/questions/76500378/how-to-open-app-via-appintents-conditionally">How to open App via AppIntents conditionally?</a></li>
+  </ul>
+    
+</body>
 </html>
